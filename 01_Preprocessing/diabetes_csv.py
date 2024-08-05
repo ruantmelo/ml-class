@@ -20,7 +20,7 @@ data = pd.read_csv('diabetes_dataset_pre_processed.csv')
 print(' - Criando X e y para o algoritmo de aprendizagem a partir do arquivo diabetes_dataset')
 # Caso queira modificar as colunas consideradas basta algera o array a seguir.
 feature_cols = ['Glucose', 'BloodPressure', 'SkinThickness', 
-                'Insulin', 'BMI', 'DiabetesPedigreeFunction']
+                'BMI', 'DiabetesPedigreeFunction', 'Age']
 X = data[feature_cols]
 y = data.Outcome
 
@@ -33,7 +33,13 @@ neigh.fit(X, y)
 print(' - Aplicando modelo e enviando para o servidor')
 data_app = pd.read_csv('diabetes_app.csv')
 data_app = data_app[feature_cols]
-y_pred = neigh.predict(data_app)
+df_normalized = data_app.copy() 
+  
+# apply normalization techniques 
+for column in df_normalized.columns: 
+    df_normalized[column] = (df_normalized[column] - df_normalized[column].min()) / (df_normalized[column].max() - df_normalized[column].min())     
+  
+y_pred = neigh.predict(df_normalized)
 
 # Enviando previsões realizadas com o modelo para o servidor
 URL = "https://aydanomachado.com/mlclass/01_Preprocessing.php"

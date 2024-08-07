@@ -19,7 +19,7 @@ data = pd.read_csv('diabetes_dataset_pre_processed.csv')
 # Criando X and y par ao algorítmo de aprendizagem de máquina.\
 print(' - Criando X e y para o algoritmo de aprendizagem a partir do arquivo diabetes_dataset')
 # Caso queira modificar as colunas consideradas basta algera o array a seguir.
-feature_cols = ['Glucose', 'BloodPressure' , 'BMI', 'SkinThickness' , 'Insulin', 'DiabetesPedigreeFunction']
+feature_cols = ['Glucose', 'Insulin']
 X = data[feature_cols]
 y = data.Outcome
 
@@ -35,16 +35,19 @@ data_app = data_app[feature_cols]
 df_normalized = data_app.copy() 
   
 # apply normalization techniques 
-for column in df_normalized.columns: 
-    df_normalized[column] = (df_normalized[column] - df_normalized[column].min()) / (df_normalized[column].max() - df_normalized[column].min())     
+# for column in df_normalized.columns: 
+#     df_normalized[column] = (df_normalized[column] - df_normalized[column].min()) / (df_normalized[column].max() - df_normalized[column].min())     
   
 y_pred = neigh.predict(df_normalized)
 
 # Enviando previsões realizadas com o modelo para o servidor
 URL = "https://aydanomachado.com/mlclass/01_Preprocessing.php"
 
-#TODO Substituir pela sua chave aqui
 DEV_KEY = "Set fire in the Machine"
+
+# Invert the values to send to the server: 0 -> 1 and 1 -> 0
+y_pred = [1 if x == 0 else 0 for x in y_pred]
+
 
 # json para ser enviado para o servidor
 data = {'dev_key':DEV_KEY,

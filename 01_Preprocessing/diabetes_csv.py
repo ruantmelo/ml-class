@@ -34,10 +34,6 @@ data_app = pd.read_csv('diabetes_app.csv')
 data_app = data_app[feature_cols]
 df_normalized = data_app.copy() 
   
-# apply normalization techniques 
-# for column in df_normalized.columns: 
-#     df_normalized[column] = (df_normalized[column] - df_normalized[column].min()) / (df_normalized[column].max() - df_normalized[column].min())     
-  
 y_pred = neigh.predict(df_normalized)
 
 # Enviando previsões realizadas com o modelo para o servidor
